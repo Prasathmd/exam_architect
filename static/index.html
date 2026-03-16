@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exam-Architect AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <div class="layout">
+    <header class="header">
+      <h1 class="logo">Exam-Architect AI</h1>
+      <p class="tagline">Convert documents into bilingual MCQs for TNPSC, UPSC, SSC &amp; Banking exams</p>
+      <p class="system-time" id="systemTime"></p>
+    </header>
+
+    <main class="main">
+      <section class="card upload-card">
+        <h2>1. Upload document</h2>
+        <p class="hint">PDF, DOCX, or TXT. Max 50 MB.</p>
+        <div class="meta-grid">
+          <div>
+            <label for="subject">Subject</label>
+            <select id="subject" required>
+              <option value="">Select subject</option>
+              <option>Tamil</option>
+              <option>English</option>
+              <option>Maths</option>
+              <option>Social</option>
+              <option>Science</option>
+              <option>Geography</option>
+              <option>Biology</option>
+              <option>Zoology</option>
+              <option>Botany</option>
+              <option>Psychology</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="className">Class name</label>
+            <select id="className" required>
+              <option value="">Select class</option>
+              <option>6th</option>
+              <option>7th</option>
+              <option>8th</option>
+              <option>9th</option>
+              <option>10th</option>
+              <option>11th</option>
+              <option>12th</option>
+              <option>UG</option>
+              <option>PG</option>
+              <option>B.Ed</option>
+              <option>General</option>
+            </select>
+          </div>
+          <div>
+            <label for="term">Term</label>
+            <select id="term" required>
+              <option value="">Select term</option>
+              <option>Term-I</option>
+              <option>Term-II</option>
+              <option>Term-III</option>
+            </select>
+          </div>
+          <div>
+            <label for="uploadedBy">Uploaded by</label>
+            <input id="uploadedBy" type="text" placeholder="Enter your name" />
+          </div>
+        </div>
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="fileInput" accept=".pdf,.docx,.doc,.txt" hidden />
+          <p class="upload-text">Drag &amp; drop or <span class="link" id="browseLink">browse</span></p>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-bar"><div class="progress-fill" id="uploadProgressFill"></div></div>
+          <p class="hint progress-text" id="uploadProgressText"></p>
+        </div>
+        <div class="row">
+          <button type="button" class="btn btn-primary" id="uploadBtn" disabled>Upload</button>
+          <span class="status" id="uploadStatus"></span>
+        </div>
+        <p class="job-id" id="jobIdLine"></p>
+        <p class="job-id" id="jobMetaLine"></p>
+      </section>
+
+      <section class="card process-card">
+        <h2>2. Process document</h2>
+        <p class="hint">Chunk and index for question generation.</p>
+        <div class="row">
+          <button type="button" class="btn btn-secondary" id="processBtn" disabled>Process</button>
+          <span class="status" id="processStatus"></span>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-bar"><div class="progress-fill process-animated" id="processProgressFill"></div></div>
+          <p class="hint progress-text" id="processProgressText"></p>
+        </div>
+      </section>
+
+      <section class="card generate-card">
+        <h2>3. Generate questions</h2>
+        <p class="hint">From pasted text or from your uploaded document.</p>
+        <div class="tabs">
+          <button type="button" class="tab active" data-tab="text">From text</button>
+          <button type="button" class="tab" data-tab="job">From document</button>
+        </div>
+        <div class="tab-panel active" id="panelText">
+          <label for="textChunk">Paste content (min 50 characters)</label>
+          <textarea id="textChunk" rows="6" placeholder="Paste educational content here..."></textarea>
+          <div class="row">
+            <button type="button" class="btn btn-primary" id="generateFromTextBtn">Generate MCQs</button>
+            <span class="status" id="generateTextStatus"></span>
+          </div>
+        </div>
+        <div class="tab-panel" id="panelJob">
+          <p class="hint">Uses your last uploaded &amp; processed document.</p>
+          <div class="row">
+            <button type="button" class="btn btn-primary" id="generateFromJobBtn" disabled>Generate from document</button>
+            <span class="status" id="generateJobStatus"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card questions-card">
+        <h2>4. Questions &amp; export</h2>
+        <div class="row row-between">
+          <button type="button" class="btn btn-secondary" id="refreshQuestionsBtn" disabled>Refresh list</button>
+          <div class="row">
+            <a class="btn btn-outline" id="exportDocxLink" style="display:none">Download DOCX</a>
+            <a class="btn btn-outline" id="exportPdfLink" style="display:none">Download PDF</a>
+          </div>
+        </div>
+        <div class="questions-box" id="questionsBox">
+          <p class="empty" id="questionsEmpty">Generate questions to see them here.</p>
+          <pre class="questions-text" id="questionsText"></pre>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <a href="/docs" target="_blank" rel="noopener">API docs</a>
+      <span>·</span>
+      <a href="/health" target="_blank" rel="noopener">Health</a>
+    </footer>
+  </div>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
